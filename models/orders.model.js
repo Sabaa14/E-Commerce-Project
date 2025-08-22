@@ -10,13 +10,6 @@ const ordersSchema = new mongoose.Schema({
 
     },
 
-    product :{
-
-        type: String,
-        required :true,
-        unique :true
-
-    },
     amount :{
 
         type: Number,
@@ -39,9 +32,52 @@ const ordersSchema = new mongoose.Schema({
     address:{
         type: String,
         required :true
+    },
+
+    products: [
+    {
+        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+        quantity: { type: Number, required: true }
     }
+    ],
+
+    status: {
+
+    type: String,
+    enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
+    default: "pending"
+
+    },
+
+    paymentStatus: {
+
+    type: String,
+    enum: ["pending", "paid", "failed", "refunded"],
+    default: "pending"
+
+    },
+
+    trackingNumber: {
+
+    type: String
+
+    },
+
+    createdAt: {
+
+    type: Date,
+    default: Date.now
+
+    },
+    updatedAt: {
+
+    type: Date,
+    default: Date.now
+
+    }
+
 
 })
 
 const Orders = mongoose.model('orders',ordersSchema);
-model.exports = productSchema;
+model.exports = Orders;

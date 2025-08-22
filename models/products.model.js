@@ -32,9 +32,55 @@ const productSchema = new mongoose.Schema({
         type: String,
         required :true
 
+    },
+    stock: {
+        type: Number,
+        required: true,
+        min: 0
+},
+
+    category: {
+        type: String,
+        required: true
+    },
+
+    variants: [
+    {
+        size: String,
+        color: String,
+        stock: Number
     }
+    ],
+
+    discount: {
+
+        type: Number,
+        default: 0
+
+    },
+
+    rating: {
+
+        type: Number,
+        default: 0
+        
+    },
+
+    createdAt: {
+
+        type: Date,
+        default: Date.now
+
+    },
+    updatedAt: {
+
+        type: Date,
+        default: Date.now
+
+    }
+
 
 })
 
 const Product = mongoose.model('product',productSchema);
-model.exports = productSchema;
+model.exports = Product;

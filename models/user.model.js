@@ -19,8 +19,8 @@ email: {
 address :{
 
     type : String,
-    required : required
-    
+    required : true
+
 },
 
 phone:{
@@ -42,8 +42,46 @@ age:{
     type : Number,
     required : true
 
+},
+
+role: {
+    
+  type: String,
+  enum: ["user", "admin"],
+  default: "user"
+
+},
+
+addresses: [
+  {
+    street: String,
+    city: String,
+    zip: String,
+    country: String
+  }
+],
+
+wishlist: [
+
+  { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
+
+],
+
+createdAt: {
+
+  type: Date,
+  default: Date.now
+
+},
+
+updatedAt: {
+
+  type: Date,
+  default: Date.now
+
 }
+
 })
 
 const User = mongoose.model('User',userSchema);
-model.exports = User;
+module.exports = User;
