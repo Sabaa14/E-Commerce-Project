@@ -1,45 +1,47 @@
 const mongoose = require('mongoose')
 
 const ordersSchema = new mongoose.Schema({
-
+    
     user: {
         
-        type : String,
+        type : mongoose.Schema.Types.ObjectId, ref: "User",
         required : true,
         unique : true
-
+        
     },
+    
+    orderItems: [
+    {
+        name: { type: String, required: true },
+        image: { type: String, required: true },
+        price: { type: Number, required: true },
+        quantity: { type: Number, required: true },
+        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
 
-    amount :{
+    }
+    ],
+    
+    totalPrice :{
 
         type: Number,
         required :true
 
     },
-    date : {
 
-        type: Date,
-        required : true
-
-    },
-    paymentinfo:{
+   paymentMethod: {
 
         type: String,
-        required :true
+        enum: ['PayPal', 'CreditCard', 'Stripe', 'CashOnDelivery'],
+        required: true
 
     },
 
-    address:{
+
+    shippingAddress:{
         type: String,
         required :true
     },
 
-    products: [
-    {
-        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-        quantity: { type: Number, required: true }
-    }
-    ],
 
     status: {
 
