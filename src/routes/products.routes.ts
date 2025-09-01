@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const LoginAuth = require('../middleware/auth');
+const {LoginAuth, admin} = require('../middleware/auth');
 
 
 router.get('/', showproducts);
 router.get('/:id',showproductById)
-router.post('/', LoginAuth ,createproducts )
-router.put('(/:id', LoginAuth ,updateproductById )
-router.delete('/:id' , LoginAuth ,deleteproductById )
+router.post('/', LoginAuth , admin , createproducts )
+router.put('(/:id', LoginAuth , admin , updateproductById )
+router.delete('/:id' , LoginAuth , admin , deleteproductById )
 
 
 module.exports = router;

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const LoginAuth = require('../middleware/auth');
+const {LoginAuth , admin } = require('../middleware/auth');
 
 
 router.get('/', showcategories);
-router.post('/', LoginAuth ,createcategories)
-router.put('(/:id', LoginAuth ,updatecategorieById)
-router.delete('/:id', LoginAuth ,deletecategorieById)
+router.post('/', LoginAuth , admin ,createcategories)
+router.put('(/:id', LoginAuth , admin ,updatecategorieById)
+router.delete('/:id', LoginAuth , admin , deletecategorieById)
 
 
 module.exports = router;
