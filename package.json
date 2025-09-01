@@ -7,7 +7,8 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -19,8 +20,19 @@
     "email-validator": "^2.0.4",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.17.2",
+    "mongoose": "^8.18.0",
+    "multer": "^2.0.2",
     "nodemon": "^3.1.10",
     "tsc": "^2.0.4"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sabaa14/E-Commerce-Project.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Sabaa14/E-Commerce-Project/issues"
+  },
+  "homepage": "https://github.com/Sabaa14/E-Commerce-Project#readme"
 }
