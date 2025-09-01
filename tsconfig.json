@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Module System
+    "module": "CommonJS",
+    "target": "ES2020",
+
+    // Type Support
+    "types": ["node", "mongoose"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    // Output Options
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Type Checking
+    "strict": true,
+    "noImplicitAny": false, // You can turn this on later
+    "strictNullChecks": true,
+
+    // Module Detection
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+
+    // Compatibility
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "useUnknownInCatchVariables": false
+
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -80,4 +80,4 @@ const ordersSchema = new mongoose.Schema({
 })
 
 const Orders = mongoose.model('orders',ordersSchema);
-model.exports = Orders;
+module.exports = Orders;

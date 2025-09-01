@@ -2,14 +2,15 @@ const express = require('express');
 const app = express();
 const connectDB = require('./config/db');
 const cors = require('cors');
-require.apply('dotenv').config();
+require('dotenv').config();
+
 
 
 
 app.use(express.json());
 
 
-app.use((error, req, res, next) => {
+app.use((error : unknown, req, res, next) => {
     console.log("This is the error handling middleware: ", error);
     res.status(500).send("Something went wrong");
 })
