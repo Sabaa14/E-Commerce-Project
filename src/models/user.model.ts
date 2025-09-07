@@ -1,93 +1,72 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-name :{
-
-    type : String,
-    required:true,
-    unique : true,
-
-},
-
-email: {
-    
+  name: {
     type: String,
-    required : true ,
+    required: true,
+    unique: true,
+  },
+
+  email: {
+    type: String,
+    required: true,
     unique: true
-},
+  },
 
-address :{
+  address: {
+    type: String,
+    required: true
+  },
 
-    type : String,
-    required : true
-
-},
-
-phone:{
-
+  phone: {
     type: Number,
-    required : true ,
-    unique : true
+    required: true,
+    unique: true
+  },
 
-},
-password :{
+  password: {
+    type: String,
+    required: true
+  },
 
-    type :String,
-    required : true
+  age: {
+    type: Number,
+    required: true
+  },
 
-},
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user"
+  },
 
-age:{
+  addresses: [
+    {
+      street: String,
+      city: String,
+      zip: String,
+      country: String
+    }
+  ],
 
-    type : Number,
-    required : true
+  wishlist: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
+  ],
 
-},
+  cart: [
+    { product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }, quantity: { type: Number, default: 1 } }
+  ],
 
-role: {
-    
-  type: String,
-  enum: ["user", "admin"],
-  default: "user"
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 
-},
-
-addresses: [
-  {
-    street: String,
-    city: String,
-    zip: String,
-    country: String
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
-],
-
-wishlist: [
-
-  { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
-
-],
-
-cart: [
-
-  { product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }, quantity: { type: Number, default: 1 } }
-
-],
-
-createdAt: {
-
-  type: Date,
-  default: Date.now
-
-},
-
-updatedAt: {
-
-  type: Date,
-  default: Date.now
-
-}
-
 })
 
-const User = mongoose.model('User',userSchema);
+const User = mongoose.model('User', userSchema);
 module.exports = User;

@@ -3,30 +3,26 @@ const app = express();
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/user.routes');
 const cartRoutes = require('./routes/cart.routes');
-const ordersRoutes = require('./routes/orders.routes');
-const productsRoutes = require('./routes/products.routes');
-const reviewsRoutes = require('./routes/reviews.routes');
-const wishlistRoutes = require('./routes/wishlist.routes'); 
-const categoriesRoutes = require('./routes/categories.routes'); 
+// const ordersRoutes = require('./routes/orders.routes');
+// const productsRoutes = require('./routes/products.routes');
+// const reviewsRoutes = require('./routes/reviews.routes');
+// const wishlistRoutes = require('./routes/wishlist.routes'); 
+// const categoriesRoutes = require('./routes/categories.routes'); 
 const cors = require('cors');
 require('dotenv').config();
 
 
 app.use('/api/users', userRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/orders', ordersRoutes);
-app.use('/api/products', productsRoutes);
-app.use('/api/reviews', reviewsRoutes);
-app.use('/api/wishlist', wishlistRoutes);
-app.use('/api/categories', categoriesRoutes);
+// app.use('/api/orders', ordersRoutes);
+// app.use('/api/products', productsRoutes);
+// app.use('/api/reviews', reviewsRoutes);
+// app.use('/api/wishlist', wishlistRoutes);
+// app.use('/api/categories', categoriesRoutes);
 
 app.use(express.json());
 
 app.use(cors());
-
-
-
-
 
 app.use((error : unknown, req, res, next) => {
     console.log("This is the error handling middleware: ", error);
