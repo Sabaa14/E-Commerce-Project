@@ -1,18 +1,14 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
-import { Request, Response, NextFunction } from 'express';
-import { UserInterface } from '../types/User';
-
-interface AuthenticatedRequest extends Request {
-    user: UserInterface; 
-}
+import { Response, NextFunction } from 'express';
+import { AuthenticatedRequest } from '../interfaces/AuthenticatedRequest';
 
 const loginAuth = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         // making sure the headers has the authorization word
-        const authHeader = req.headers['authorization'];
-        // testing if we have the header or also we have have it with the word Bearer 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        const authHeader = req.headers['Authorization'];
+        // testing if we have the header or also we have have it with the word Bearer
+        if (!authHeader || typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) {
             return res.status(401).json({ success: false, message: 'No token provided!' });
         }
 
@@ -21,7 +17,6 @@ const loginAuth = async (req: AuthenticatedRequest, res: Response, next: NextFun
 
         // verify the token 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
 
         // Find the user and attach it back to the request and then Exclude password
         const user = await User.findById(decoded.id).select('-password');
