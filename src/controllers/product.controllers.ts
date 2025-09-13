@@ -80,19 +80,7 @@ const createproducts = async (req: AuthenticatedRequest , res : Response)=> {
     return res.status(400).json({ message: "Product data is required" });
   }
 
-    let newProduct = new Product({
-      title: productData.title,
-      description: productData.description,
-      price: productData.price,
-      photo: productData.photo,
-      reviews: productData.reviews,
-      stock: productData.stock,
-      category: productData.category,
-      variants: productData.variants,
-      discount: productData.discount,
-      rating: productData.rating,
-    
-    });
+    const newProduct  = new Product(productData);
            
     await newProduct.save();
     res.status(201).json({ message: "Product created successfully", product: newProduct });
@@ -117,7 +105,7 @@ const updateproductById = async (req: AuthenticatedRequest , res : Response)=> {
    res.status(200).json({
             success: true,
             message: "Product has been updated",
-            task:updatedproduct
+            product:updatedproduct
         })
 
   } catch (error) {
