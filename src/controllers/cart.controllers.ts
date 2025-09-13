@@ -46,7 +46,7 @@ const deletecartItem = async  (req: AuthenticatedRequest, res: Response) => {
         let searchedUser = await User.findById(id).select('cart');
         
         if(!searchedUser){
-                  return res.status(404).json({ message: "Cart not found" });
+            return res.status(404).json({ message: "Cart not found" });
             }
             
         const itemId = req.params.itemId ;
