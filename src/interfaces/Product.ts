@@ -20,3 +20,6 @@ export interface IProduct {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+// export type NewProduct
+// export type 

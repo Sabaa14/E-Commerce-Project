@@ -1,3 +1,5 @@
+import { Request, Response } from "express";
+
 const express = require('express');
 const app = express();
 const connectDB = require('./config/db');
@@ -21,15 +23,19 @@ app.use('/api/cart', cartRoutes);
 // app.use('/api/categories', categoriesRoutes);
 
 app.use(express.json());
-
 app.use(cors());
 
-app.use((error : unknown, req, res, next) => {
+app.use((error : any, req: Request, res: Response, next) => {
     console.log("This is the error handling middleware: ", error);
     res.status(500).send("Something went wrong");
-})
+});
 
 app.listen(process.env.PORT , () => {
     connectDB();
     console.log("The server is running on Port : " , process.env.PORT);
+})
+
+process.on('unhandledRejection', (error: any, req: Request, res: Response, next) => {
+    console.error("There is an error:", error.message);
+    res.status(500).json({success: false, message: `There is an error ${error.message}`})
 })

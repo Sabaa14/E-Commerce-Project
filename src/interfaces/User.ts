@@ -1,3 +1,5 @@
+import { IProduct } from "./Product";
+
 interface UserInterface {
     _id: string;
     name: string;
