@@ -1,85 +1,73 @@
 const mongoose = require('mongoose')
 
 const ordersSchema = new mongoose.Schema({
-    
     user: {
-        
-        type : mongoose.Schema.Types.ObjectId, ref: "User",
-        required : true,
-        unique : true
-        
+        type: mongoose.Schema.Types.ObjectId, ref: "User",
+        required: true,
     },
-    
+    /**
+     * {
+     *  _id: ljjklj,
+     *  user: id
+     * },
+     * {
+     * _id,
+     * user: id
+     * }
+     */
+
     orderItems: [
-    {
-        name: { type: String, required: true },
-        image: { type: String, required: true },
-        price: { type: Number, required: true },
-        quantity: { type: Number, required: true },
-        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
-
-    }
+        {
+            name: { type: String, required: true },
+            image: { type: String, required: true },
+            price: { type: Number, required: true },
+            quantity: { type: Number, required: true },
+            product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
+        }
     ],
-    
-    totalPrice :{
 
+    totalPrice: {
         type: Number,
-        required :true
-
+        required: true
     },
 
-   paymentMethod: {
-
+    paymentMethod: {
         type: String,
         enum: ['PayPal', 'CreditCard', 'Stripe', 'CashOnDelivery'],
         required: true
-
     },
 
-
-    shippingAddress:{
+    shippingAddress: {
         type: String,
-        required :true
+        required: true
     },
-
 
     status: {
-
-    type: String,
-    enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
-    default: "pending"
-
+        type: String,
+        enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
+        default: "pending"
     },
 
     paymentStatus: {
-
-    type: String,
-    enum: ["pending", "paid", "failed", "refunded"],
-    default: "pending"
-
+        type: String,
+        enum: ["pending", "paid", "failed", "refunded"],
+        default: "pending"
     },
 
     trackingNumber: {
-
-    type: String
-
+        type: String
     },
 
     createdAt: {
-
-    type: Date,
-    default: Date.now
-
+        type: Date,
+        default: Date.now
     },
+
     updatedAt: {
-
-    type: Date,
-    default: Date.now
-
+        type: Date,
+        default: Date.now
     }
-
-
 })
 
-const Orders = mongoose.model('orders',ordersSchema);
+const Orders = mongoose.model('orders', ordersSchema);
 module.exports = Orders;
