@@ -11,7 +11,6 @@ const Product = require('../models/product.model');
 const showproducts = async (req: AuthenticatedRequest , res : Response)=> {
 
     try {
-
         // define the default values of the using filter,sort and paginate
          const {
       page = 1,
