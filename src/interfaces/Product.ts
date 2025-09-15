@@ -1,5 +1,15 @@
+export interface IReview {
+  _id?: string;
+  name: string;
+  email?: string;
+  user?: string; // MongoDB ObjectId as string
+  rating: number;
+  comment: string;
+  createdAt?: Date;
+}
+
 export interface IProduct {
-  _id?: string; // MongoDB automatically assigns this
+  _id?: string;
   title: string;
   description: string;
   price: number;
@@ -7,7 +17,7 @@ export interface IProduct {
     data: Buffer;
     contentType: string;
   };
-  reviews: string;
+  reviews: IReview[];
   stock: number;
   category: string;
   variants?: {
@@ -20,6 +30,3 @@ export interface IProduct {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-// export type NewProduct
-// export type 

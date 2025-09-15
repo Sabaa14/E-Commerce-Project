@@ -22,9 +22,9 @@ const showcart = async (req: AuthenticatedRequest, res: Response) => {
 // Request => // req.body, req.params, req.query,
 //  req.user
 
-const createCart = async (req: AuthenticatedRequest, res: Response) => {
+const createCart = async (req: AuthenticatedRequest<ICart>, res: Response) => {
     let user = req.user;
-    let cart = req.body as unknown as ICart;
+    let cart = req.body ;
     try {
         let newCart = new Cart({
             user: cart.user,

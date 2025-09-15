@@ -1,13 +1,14 @@
 import { IOrder } from "../interfaces/Order";
 import { AuthenticatedRequest } from "../interfaces/AuthenticatedRequest";
 import { Request, Response } from "express";
+import { IProduct } from "../interfaces/Product";
 const admin = require('../middleware/auth')
 const Order = require('../models/orders.model');
 
 
-const createorder = async (req: AuthenticatedRequest, res: Response) => {
+const createorder = async (req: AuthenticatedRequest<IOrder>, res: Response) => {
 
-    const orderData: IOrder = req.body as unknown as IOrder;
+    const orderData = req.body ;
 
     if (!orderData) {
         return res.status(400).json({ message: "Order data is required" });

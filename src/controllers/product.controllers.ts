@@ -5,20 +5,12 @@ import { Request, Response } from "express";
 import { QueryParams } from "../interfaces/query";
 const Product = require('../models/product.model');
 
-<<<<<<< HEAD
 
 
-const showproducts = async (req: AuthenticatedRequest , res : Response)=> {
-
-    try {
-        // define the default values of the using filter,sort and paginate
-         const {
-=======
 const showproducts = async (req: AuthenticatedRequest, res: Response) => {
   try {
     // define the default values of the using filter,sort and paginate
     const {
->>>>>>> 300d7515fc4826c846872a7a17176643eb5c52e0
       page = 1,
       limit = 10,
       sortBy = "createdAt",

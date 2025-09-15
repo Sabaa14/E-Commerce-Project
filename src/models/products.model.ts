@@ -21,12 +21,37 @@ const productSchema = new mongoose.Schema({
         contentType: String
 
     },
-    reviews: {
-
-        type: String,
-        required: true
-
+    reviews: [
+  {
+    name: {
+      type: String,
+      required: true
     },
+    email: {
+      type: String,
+      required: false // Optional for logged-in users
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: false // Present only for registered users
+    },
+    rating: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5
+    },
+    comment: {
+      type: String,
+      required: true
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  }
+],
     stock: {
         type: Number,
         required: true,
@@ -76,5 +101,5 @@ const productSchema = new mongoose.Schema({
 
 })
 
-const Product = mongoose.model('product', productSchema);
+const Product = mongoose.model('Product', productSchema);
 module.exports = Product;
