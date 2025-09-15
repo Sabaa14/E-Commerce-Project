@@ -23,12 +23,29 @@ app.use('/api/cart', cartRoutes);
 // app.use('/api/categories', categoriesRoutes);
 
 app.use(express.json());
-app.use(cors());
+// backendorigin = protocol + domain + port
+// frontendorigin = protocol + domain + port
+// whitlist
+let whitelist = ['http://localhost:3300', 'https://www.abdelrahman.com', 'https://localhost:8000'];
+
+app.use(cors({
+    origin: function(origin, callback) {
+        if(whitelist.includes(origin)) {
+            callback(null, true)
+        } else {
+            callback("Error")
+        }
+    }
+}));
 
 app.use((error : any, req: Request, res: Response, next) => {
     console.log("This is the error handling middleware: ", error);
     res.status(500).send("Something went wrong");
 });
+
+app.get('/', (req, res) => {
+    res.send("The server is running on http://localhost:3000")
+})
 
 app.listen(process.env.PORT , () => {
     connectDB();
