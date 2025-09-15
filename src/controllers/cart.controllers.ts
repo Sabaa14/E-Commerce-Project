@@ -24,7 +24,7 @@ const showcart = async (req: AuthenticatedRequest, res: Response) => {
 
 const createCart = async (req: AuthenticatedRequest<ICart>, res: Response) => {
     let user = req.user;
-    let cart = req.body ;
+    let cart = req.body;
     try {
         let newCart = new Cart({
             user: cart.user,
@@ -38,36 +38,36 @@ const createCart = async (req: AuthenticatedRequest<ICart>, res: Response) => {
     }
 }
 
-const deletecartItem = async  (req: AuthenticatedRequest, res: Response) => {
+const deletecartItem = async (req: AuthenticatedRequest, res: Response) => {
     let user = req.user; // Access the authenticated user from the request
     let id = user._id;
 
     try {
         let searchedUser = await User.findById(id).select('cart');
-        
-        if(!searchedUser){
+
+        if (!searchedUser) {
             return res.status(404).json({ message: "Cart not found" });
-            }
-            
-        const itemId = req.params.itemId ;
+        }
+
+        const itemId = req.params.itemId;
         const itemExists = searchedUser.cart.find(
             item => item.product.toString() === itemId
         );
-        if(!itemExists){
-         return res.status(404).json({ message: "Item not found" });
+        if (!itemExists) {
+            return res.status(404).json({ message: "Item not found" });
         }
-    
+
         searchedUser.cart = searchedUser.cart.filter(
             item => item.product.toString() !== itemId
         );
-    
-        
+
+
         await searchedUser.save();
-        res.status(200).json({ message: "Item successfully deleted" , cart: searchedUser.cart});
-    
-        
+        res.status(200).json({ message: "Item successfully deleted", cart: searchedUser.cart });
+
+
     } catch (error) {
-          console.log("Error from deletecartItem :", error.message);
+        console.log("Error from deletecartItem :", error.message);
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
@@ -75,22 +75,22 @@ const deletecartItem = async  (req: AuthenticatedRequest, res: Response) => {
 const deletecartAllItems = async (req: AuthenticatedRequest, res: Response) => {
     let user: UserInterface = req.user; // Access the authenticated user from the request
     try {
-        
-            const searchedUser = await User.findById(user._id).select('cart');
-        
-            if(!searchedUser){
-                      return res.status(404).json({ message: "Cart not found" });
-                }
-        
-             searchedUser.cart = [];
-             await searchedUser.save();
-            res.status(200).json({ message: "All Items successfully deleted" , cart: searchedUser.cart});
-        
-} catch (error) {
-  console.log("Error from deletecartAllItems :", error.message);
+
+        const searchedUser = await User.findById(user._id).select('cart');
+
+        if (!searchedUser) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+
+        searchedUser.cart = [];
+        await searchedUser.save();
+        res.status(200).json({ message: "All Items successfully deleted", cart: searchedUser.cart });
+
+    } catch (error) {
+        console.log("Error from deletecartAllItems :", error.message);
         res.status(500).json({ message: "Server Error", error: error.message });
-}
-    
+    }
+
 };
 
 module.exports = {
