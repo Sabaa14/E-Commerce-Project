@@ -6,7 +6,7 @@ const admin = require('../middleware/auth')
 const Order = require('../models/orders.model');
 
 
-const createorder = async (req: AuthenticatedRequest<IOrder>, res: Response) => {
+const createOrder = async (req: AuthenticatedRequest<IOrder>, res: Response) => {
 
     const orderData = req.body ;
 
@@ -25,12 +25,13 @@ const createorder = async (req: AuthenticatedRequest<IOrder>, res: Response) => 
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 }
-const showorders = async (req: AuthenticatedRequest, res: Response) => {
+
+const showOrders = async (req: AuthenticatedRequest, res: Response) => {
 
     const user = req.user;
 
     try {
-        const getAllOrders = await Order.find({ user: req.user._id });
+        const getAllOrders = await Order.find({ user: user._id });
         res.status(200).json({ success: true, data: getAllOrders })
 
     } catch (error) {
@@ -39,8 +40,7 @@ const showorders = async (req: AuthenticatedRequest, res: Response) => {
     }
 }
 
-
-const showorderById = async (req: Request<{ orderId: string }>, res: Response) => {
+const showOrderById = async (req: Request<{ orderId: string }>, res: Response) => {
     const { orderId } = req.params;
 
     if (!orderId) {
@@ -63,9 +63,10 @@ const showorderById = async (req: Request<{ orderId: string }>, res: Response) =
         console.log("Error from showorderById :", error.message);
         res.status(500).json({ message: "Server Error", error: error.message });
     }
-}
-const showorderAdmin = async (req: AuthenticatedRequest, res: Response) => {
+};
 
+// make it a pagination
+const showAllOrdersAdmin = async (req: AuthenticatedRequest, res: Response) => {
     const user = req.user;
 
     if (!user || user.role !== 'admin') {
@@ -73,7 +74,7 @@ const showorderAdmin = async (req: AuthenticatedRequest, res: Response) => {
     }
 
     try {
-        const adminOrder = await Order.find().populate('user').populate('items.product');
+        const adminOrder = await Order.find().populate('user');
         res.status(200).json({ success: true, data: adminOrder })
 
     } catch (error) {
@@ -86,8 +87,8 @@ const showorderAdmin = async (req: AuthenticatedRequest, res: Response) => {
 
 
 module.exports = {
-    createorder,
-    showorders,
-    showorderById,
-    showorderAdmin
+    createOrder,
+    showOrders,
+    showOrderById,
+    showAllOrdersAdmin
 }

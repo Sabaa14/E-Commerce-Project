@@ -1,6 +1,6 @@
 export interface IReview {
   _id?: string;
-  name: string;
+  name?: string;
   email?: string;
   user?: string; // MongoDB ObjectId as string
   rating: number;

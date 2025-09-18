@@ -13,11 +13,6 @@ const userSchema = new mongoose.Schema({
     unique: true
   },
 
-  address: {
-    type: String,
-    required: true
-  },
-
   phone: {
     type: Number,
     required: true,
@@ -53,9 +48,7 @@ const userSchema = new mongoose.Schema({
     { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
   ],
 
-  cart: [
-    { product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }, quantity: { type: Number, default: 1 } }
-  ],
+  cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" },
 
   createdAt: {
     type: Date,

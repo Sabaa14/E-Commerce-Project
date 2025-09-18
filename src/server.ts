@@ -26,9 +26,9 @@ app.use(express.json());
 // backendorigin = protocol + domain + port
 // frontendorigin = protocol + domain + port
 // whitlist
-let whitelist = ['http://localhost:3300', 'https://www.abdelrahman.com', 'https://localhost:8000'];
 
-app.use(cors({
+let whitelist = ['http://localhost:3300', 'https://www.abdelrahman.com', 'https://localhost:8000'];
+let corsOptions = {
     origin: function(origin, callback) {
         if(whitelist.includes(origin)) {
             callback(null, true)
@@ -36,7 +36,9 @@ app.use(cors({
             callback("Error")
         }
     }
-}));
+};
+
+app.use(cors());
 
 app.use((error : any, req: Request, res: Response, next) => {
     console.log("This is the error handling middleware: ", error);
