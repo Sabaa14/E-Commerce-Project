@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../interfaces/AuthenticatedRequest';
 import { IProduct, IReview } from '../interfaces/Product';
-const Product = require('../models/product.model');
+const Product = require('../models/products.model');
 
 const createreview = async (req: AuthenticatedRequest<IReview>, res: Response) => {
     const { rating, comment, name, email } = req.body;

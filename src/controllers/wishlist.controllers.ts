@@ -1,19 +1,19 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../interfaces/AuthenticatedRequest';
 const User = require('../models/user.model');
-const Product = require('../models/product.model');
+const Product = require('../models/products.model');
 
 const showWishlistItems = async (req: AuthenticatedRequest, res: Response) => {
     let user = req.user;
     try {
         let userWishlist = await User.findById(user._id).select('wishlist').populate('wishlist');
-        res.status(200).json({success: true, message: "wishlist fetched successfullu", wishlist: userWishlist});
+        res.status(200).json({ success: true, message: "wishlist fetched successfullu", wishlist: userWishlist });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching wishlist items' });
     }
 };
 
-const createWishlistItem = async (req: AuthenticatedRequest , res: Response) => {
+const createWishlistItem = async (req: AuthenticatedRequest, res: Response) => {
     const productId = req.params.productId;
     try {
         const product = await Product.findById(productId);
