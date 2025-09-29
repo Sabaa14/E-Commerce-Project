@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const {LoginAuth , admin } = require('../middleware/auth');
-const { createorder, showOrders,showOrderById,showAllOrdersAdmin} = require('../controllers/order.controllers');
+const {loginAuth , admin } = require('../middleware/auth');
+const {   createOrder,
+    showOrders,
+    showOrderById,
+    showAllOrdersAdmin } = require('../controllers/order.controllers');
 
-router.post('/', LoginAuth ,createorder )
-router.get('/:userId', LoginAuth ,showOrders )
-router.get('/:id', LoginAuth ,showOrderById )
-router.get('/', LoginAuth , admin , showAllOrdersAdmin )
+router.post('/', loginAuth ,createOrder )
+router.get('/:userId', loginAuth ,showOrders )
+router.get('/:id', loginAuth ,showOrderById )
+router.get('/', loginAuth , admin , showAllOrdersAdmin )
 
 module.exports = router;

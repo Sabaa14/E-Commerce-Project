@@ -3,7 +3,7 @@ import { AuthenticatedRequest } from "../interfaces/AuthenticatedRequest";
 // import { Repository } from 'typeorm';
 import { Request, Response } from "express";
 import { QueryParams } from "../interfaces/query";
-const Product = require('../models/product.model');
+const Product = require('../models/products.model');
 
 
 

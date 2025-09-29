@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-// Import passport config
-import passport from "./config/googleAuth";
 
 const express = require("express");
 const app = express();
@@ -17,9 +15,11 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+// Import passport config
+import passport from "./config/googleAuth";
+
 // -----------------------------------------------------------------------------
 // Middleware & Routes
-// CORS
 app.use(express.json());
 
 let whitelist = [
@@ -38,7 +38,6 @@ let corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Routes
 app.use("/api/users", userRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", ordersRoutes);
@@ -49,7 +48,48 @@ app.use("/api/categories", categoriesRoutes);
 
 // -----------------------------------------------------------------------------
 // OAuth with Passport
-app.use(passport.initialize());
+//
+// Start Google login
+// app.get(
+//   "/auth/google",
+//   passport.authenticate("google", {
+//     scope: ["profile", "email"],
+//     session: false,
+//   })
+// );
+
+// // Callback
+
+// app.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", { failureRedirect: "/", session: false }),
+//   async (req: any, res: any) => {
+//     try {
+//       const googleId = req.user.id;
+//       const email = req.user.emails[0].value;
+
+//       let user = await User.findOne({ googleId });
+//       if (!user) {
+//         user = await User.create({
+//           name: req.user.displayName,
+//           email,
+//           googleId,
+//         });
+//       }
+
+//       const token = jwt.sign(
+//         { id: user._id, email: user.email, name: user.name },
+//         process.env.JWT_SECRET!,
+//         { expiresIn: "1h" }
+//       );
+
+//       res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+//     } catch (error) {
+//       console.error("OAuth error:", error);
+//       res.redirect("/login?error=oauth_failed");
+//     }
+//   }
+// );
 
 // Protected route
 app.get("/protected", (req, res) => {
