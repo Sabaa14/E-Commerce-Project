@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 var validator = require("email-validator");
 const PasswordValidator = require('password-validator');
+const passport = require('../config/googleAuth.ts')
 
 const login = async (req, res) => {
     const { email, password } = req.body;
@@ -81,7 +82,46 @@ const register = async (req, res) => {
     }
 }
 
+const googleLogin = async (req, res) => { 
+    passport.authenticate("google", {
+    scope: ["profile", "email"],
+    session: false,
+  })
+}
+
+const googleCallback = async (request, response) => {
+    passport.authenticate("google", { failureRedirect: "/", session: false }),
+  async (req: any, res: any) => {
+    try {
+      const googleId = req.user.id;
+      const email = req.user.emails[0].value;
+
+      let user = await User.findOne({ googleId });
+      if (!user) {
+        user = await User.create({
+          name: req.user.displayName,
+          email,
+          googleId,
+        });
+      }
+
+      const token = jwt.sign(
+        { id: user._id, email: user.email, name: user.name },
+        process.env.JWT_SECRET!,
+        { expiresIn: "1h" }
+      );
+
+      res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+    } catch (error) {
+      console.error("OAuth error:", error);
+      res.redirect("/login?error=oauth_failed");
+    }
+  }
+}
+
 module.exports = {
     login,
-    register
+    register,
+    googleLogin,
+    googleCallback
 }
