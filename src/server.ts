@@ -36,7 +36,7 @@ let corsOptions = {
         }
     },
 };
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use("/api/users", userRoutes);
 app.use("/api/cart", cartRoutes);
@@ -110,11 +110,20 @@ app.get("/protected", (req, res) => {
 // Error handler
 app.use((error: any, req: Request, res: Response, next: any) => {
   console.log("This is the error handling middleware: ", error);
-  res.status(500).send("Something went wrong");
+  res.status(500).send(`Something went wrong: ${error}`);
 });
 
 // Root endpoint
 app.get("/", (req, res) => {
+  // let {token} = req.query;
+  // let decoded = jwt.verify(token)
+  // let user = User.findOne(decoded.id);
+  // user.isVerified = true
+  // await user.save()
+  // 
+  // res.redirect(process.env.frontendurl/verify/email)
+  // in frontend: button -> home page
+  // 
   res.send("The server is running on http://localhost:3000");
 });
 
@@ -126,6 +135,7 @@ app.listen(process.env.PORT, () => {
 
 // Global unhandled rejection
 process.on("unhandledRejection", (error: any) => {
+  console.log("There is an error unhandled")
   console.error("Unhandled rejection:", error);
   process.exit(1); 
 });

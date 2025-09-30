@@ -1,3 +1,6 @@
+import { sendEmail } from "../utils/mailer";
+import { verifyEmail }from "../utils/templates/verifyEmail.js"
+
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -5,35 +8,9 @@ var validator = require("email-validator");
 const PasswordValidator = require('password-validator');
 const passport = require('../config/googleAuth.ts')
 
-const login = async (req, res) => {
-    const { email, password } = req.body;
-    const existingUser = await User.findOne({ email });
-
-    if (!existingUser) {
-        return res.status(404).json({ success: false, message: "User is not found" });
-    }
-
-    try {
-
-        const isPassowordValid = await bcrypt.compare(password, existingUser.password);
-
-        if (!isPassowordValid) {
-            return res.status(404).json({ success: false, message: "password is not correct!" });
-        }
-
-        const token = jwt.sign({ id: existingUser._id, email: existingUser.email }, process.env.JWT_SECRET);
-
-        res.setHeader('Authorization', `Bearer ${token}`);
-        res.status(200).json({ success: true, message: "user has Logged in", user: existingUser });
-
-    } catch (error) {
-        res.status(500).json("Error :", error.message);
-    }
-}
-
-
 const register = async (req, res) => {
-    const { username, email, password, confirmPassword } = req.body;
+  console.log("Enter the register method");
+  const { username, email, password, confirmPassword } = req.body;
     const exsitingUser = await User.findOne({ email });
     const emailtester = validator.validate(email);
     const Passwordvalidation = new PasswordValidator()
@@ -75,7 +52,51 @@ const register = async (req, res) => {
 
         await newUser.save();
 
-        res.status(201).json({ success: true, message: " a NewUser has just been created ", user: newUser });
+        let verifyToken = jwt.sign({id: newUser._id, email: newUser.email}, process.env.JWT_SECRET);
+        let verificationLink = `http://localhost:3000/api/users/verify-email?token=${verifyToken}`;
+        let verificationTemplate = verifyEmail(newUser.name, newUser.email, verificationLink)
+
+        let mailOption = {
+          to: newUser.email,
+          subject: "Verify Your Email",
+          template: verificationTemplate
+        }
+
+        await sendEmail(mailOption)
+        console.log("Email has been sent successfully");
+        res.status(201).json({ success: true, message: "We've send you a verification link, please check your email", user: newUser });
+        
+    } catch (error) {
+      console.log("There is an error: ", error.message)
+        res.status(500).json("Error: ", error.message);
+    }
+}
+
+const login = async (req, res) => {
+    const { email, password } = req.body;
+    const existingUser = await User.findOne({ email });
+
+    if (!existingUser) {
+        return res.status(404).json({ success: false, message: "User is not found" });
+      }
+      
+      if(!existingUser.isVerified) {
+        return res.status(401).json({success: false, message: "Verify Your Account first"});
+      }
+
+    try {
+
+        const isPassowordValid = await bcrypt.compare(password, existingUser.password);
+
+        if (!isPassowordValid) {
+            return res.status(404).json({ success: false, message: "password is not correct!" });
+        }
+
+
+        const token = jwt.sign({ id: existingUser._id, email: existingUser.email }, process.env.JWT_SECRET);
+
+        res.setHeader('Authorization', `Bearer ${token}`);
+        res.status(200).json({ success: true, message: "user has Logged in", user: existingUser });
 
     } catch (error) {
         res.status(500).json("Error :", error.message);
@@ -119,9 +140,31 @@ const googleCallback = async (request, response) => {
   }
 }
 
+const verifyUserEmail = async (req, res) => {
+  let {token} = req.query;
+
+  let decoded = jwt.verify(token, process.env.JWT_SECRET);
+  let user = await User.find({_id: decoded.id});
+
+  if(!user) {
+    res.status(404).json({success: false, message: "Please register first"})
+  }
+
+  if(user.isVerified) {
+    res.status(405).json({success: false, message: "The account has been verified already"});
+  }
+
+  user.isVerified = true;
+  await user.save();
+
+  res.status(200).json({success: true, message: 'The account has been verified successfully'});
+  res.redirect(`${process.env.FRONTEND_URL}/verify-email`)
+}
+
 module.exports = {
     login,
     register,
     googleLogin,
-    googleCallback
+    googleCallback,
+    verifyUserEmail
 }

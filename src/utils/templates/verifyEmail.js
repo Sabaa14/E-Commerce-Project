@@ -1,4 +1,4 @@
-const verifyemail = (user, useremail, verificationLink) => {
+const verifyEmail = (user, useremail, verificationLink) => {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -103,4 +103,7 @@ const verifyemail = (user, useremail, verificationLink) => {
  `;
 };
 
-export default verifyemail;
+// export default verifyEmail;
+module.exports = {
+  verifyEmail
+}

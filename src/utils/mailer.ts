@@ -9,11 +9,11 @@ import nodemailer from "nodemailer";
 
 // oAuth2Client.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
 
-export async function sendEmail({ to, subject, html, text}: {
+export async function sendEmail({ to, subject, template, text}: {
   to: string;
   subject: string;
+  template?: string;
   text?: string;
-  html?: string;
 }) {
   try {
     // const { token } = await oAuth2Client.getAccessToken();
@@ -31,10 +31,10 @@ export async function sendEmail({ to, subject, html, text}: {
     });
 
     const mailOptions = {
-      from: process.env.GMAIL_USER,
+      from: `"Ecommerce"<${process.env.GMAIL_USER}>`,
       to,
       subject,
-      html,
+      template,
       text,
     };
 
