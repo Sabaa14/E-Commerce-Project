@@ -9,32 +9,33 @@ import nodemailer from "nodemailer";
 
 // oAuth2Client.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
 
-export async function sendEmail({ to, subject, template, text}: {
+export async function sendEmail({ to, subject, template, text }: {
   to: string;
   subject: string;
   template?: string;
   text?: string;
 }) {
   try {
-    // const { token } = await oAuth2Client.getAccessToken();
+    // Validate credentials
+    if (!process.env.APP_EMAIL_ADDRESS || !process.env.APP_EMAIL_PASSWORD) {
+      throw new Error("Email credentials are missing. Please check APP_EMAIL_ADDRESS and APP_EMAIL_PASSWORD environment variables.");
+    }
+
+    console.log("Using email:", process.env.APP_EMAIL_ADDRESS);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        // type: "OAuth2",
-        // user: process.env.GMAIL_USER,
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        // refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-        // accessToken: token!,
+        user: process.env.APP_EMAIL_ADDRESS,
+        pass: process.env.APP_EMAIL_PASSWORD
       },
     });
 
     const mailOptions = {
-      from: `"Ecommerce"<${process.env.GMAIL_USER}>`,
+      from: `"Ecommerce"<${process.env.APP_EMAIL_ADDRESS}>`,
       to,
       subject,
-      template,
+      html: template, // Changed from 'template' to 'html'
       text,
     };
 
@@ -46,3 +47,33 @@ export async function sendEmail({ to, subject, template, text}: {
     throw new Error("Email could not be sent");
   }
 }
+
+
+/**
+ * const nodemailer = require('nodemailer');
+
+module.exports.sendEmail = async (userEmail, subject, htmlTemplate) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.APP_EMAIL_ADDRESS,
+                pass: process.env.APP_EMAIL_PASSWORD
+            }
+        });
+
+        const mailOptions = {
+            from: `"Taskaty" <${process.env.APP_EMAIL_ADDRESS}>`,
+            to: userEmail,
+            subject: subject,
+            html: htmlTemplate
+        }
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log("Email sent: ", info.response);
+    } catch (error) {
+        console.log("Error: ", error.message);
+        throw new Error("Internal Server Error: nodemailer\n", error.message)
+    }
+}
+ */

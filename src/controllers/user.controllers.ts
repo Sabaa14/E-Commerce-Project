@@ -43,27 +43,29 @@ const register = async (req, res) => {
     }
 
     try {
+      console.log("Enter Try catch block");
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
-            username,
+            name: username,
             email,
             password: hashedPassword,
         })
 
-        await newUser.save();
-
+        
         let verifyToken = jwt.sign({id: newUser._id, email: newUser.email}, process.env.JWT_SECRET);
         let verificationLink = `http://localhost:3000/api/users/verify-email?token=${verifyToken}`;
         let verificationTemplate = verifyEmail(newUser.name, newUser.email, verificationLink)
-
+        
         let mailOption = {
           to: newUser.email,
           subject: "Verify Your Email",
           template: verificationTemplate
         }
-
-        await sendEmail(mailOption)
+        
+        let response = await sendEmail(mailOption);
+        console.log("Email Response: ", response);
         console.log("Email has been sent successfully");
+        await newUser.save();
         res.status(201).json({ success: true, message: "We've send you a verification link, please check your email", user: newUser });
         
     } catch (error) {
@@ -144,7 +146,7 @@ const verifyUserEmail = async (req, res) => {
   let {token} = req.query;
 
   let decoded = jwt.verify(token, process.env.JWT_SECRET);
-  let user = await User.find({_id: decoded.id});
+  let user = await User.findOne({_id: decoded.id});
 
   if(!user) {
     res.status(404).json({success: false, message: "Please register first"})
@@ -157,6 +159,8 @@ const verifyUserEmail = async (req, res) => {
   user.isVerified = true;
   await user.save();
 
+  // cloudinary
+  console.log("Done");
   res.status(200).json({success: true, message: 'The account has been verified successfully'});
   res.redirect(`${process.env.FRONTEND_URL}/verify-email`)
 }
